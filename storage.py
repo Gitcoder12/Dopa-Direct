@@ -19,9 +19,10 @@ def load_data():
     # --- TOP LEVEL DICTIONARY MIGRATION DEFAULTS ---
     data.setdefault("custom_activities", [])
     data.setdefault("triggers", {})
-    
-    # 🎯 TARGET PLACEMENT: Add this right here to track unlocked badge history
     data.setdefault("unlocked_achievements", [])
+    
+    # 🧠 v5.2 TARGET SPOT: Inject choice metrics safely into existing saves
+    data.setdefault("redirect_history", {})
 
     # --- NESTED STATS DICTIONARY MIGRATION DEFAULTS ---
     stats = data.setdefault("stats", {})

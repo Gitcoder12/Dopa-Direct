@@ -41,21 +41,49 @@ def choose_trigger():
 
 
 def log_impulse(data):
+    from adaptive_redirector import get_recommendations, learn_choice
+    
     trigger = choose_trigger()
     log_trigger(data, trigger)
 
-    print(f"\n{CLR_YELLOW}[Intercepting] Catching impulse to open {trigger}...{CLR_RESET}")
-    time.sleep(1)
+    print(f"\n{CLR_YELLOW}⚠️ Trigger Detected: {trigger}{CLR_RESET}")
+    print(f"{CLR_CYAN}Recommended Redirects:{CLR_RESET}")
+    
+    # Pull contextual learned parameters
+    recs = get_recommendations(data, trigger, limit=3)
+    
+    for i, rec in enumerate(recs, 1):
+        count_suffix = f" (Chosen {rec['count']}x)" if rec['count'] > 0 else ""
+        print(f"  [{i}] {rec['activity']}{CLR_GREEN}{count_suffix}{CLR_RESET}")
+    
+    # Unified escape slot fallback
+    print(f"  [{len(recs) + 1}] Roll an alternative random activity option")
+    
+    choice_raw = input(f"\nSelect target action (1-{len(recs) + 1}): ").strip()
+    
+    try:
+        choice_idx = int(choice_raw)
+        if 1 <= choice_idx <= len(recs):
+            chosen_task = recs[choice_idx - 1]["activity"]
+        elif choice_idx == len(recs) + 1:
+            chosen_task = random.choice(get_all_activities(data))
+        else:
+            raise ValueError
+    except ValueError:
+        print(f"\n{CLR_RED}⚠️ Invalid choice selection. Rolling fallback random activity.{CLR_RESET}")
+        chosen_task = random.choice(get_all_activities(data))
 
-    task = random.choice(get_all_activities(data))
-    print(f"\n⚡ {CLR_GREEN}[REDIRECT SUCCESSFUL]{CLR_RESET}")
-    print(f"Instead of checking {trigger}, do this immediately:")
-    print(f"👉 {CLR_YELLOW}{task}{CLR_RESET}")
+    print(f"\n⚡ {CLR_GREEN}[REDIRECT INITIALIZED]{CLR_RESET}")
+    print(f"Instead of checking {trigger}, commit to this now:")
+    print(f"👉 {CLR_YELLOW}{chosen_task}{CLR_RESET}")
 
     completed = run_focus_lock(FOCUS_LOCK_SECONDS)
 
     if completed:
         record_success(data)
+        
+        # Core Optimization: Increment behavioral matrices only on success
+        learn_choice(data, trigger, chosen_task)
         
         # 🔗 REAL-TIME ACHIEVEMENT ENGINE HOOK
         from achievements import check_achievements
@@ -94,10 +122,13 @@ def add_custom_activity(data):
 
 def view_progress(data):
     from achievements import ACHIEVEMENT_MANIFEST, get_next_achievement
+    from adaptive_redirector import get_top_adaptive_pairings
+    
     stats = data["stats"]
     triggers = top_triggers(data)
     unlocked_ids = data.setdefault("unlocked_achievements", [])
     focus_score = stats.setdefault("focus_score", 100)
+    adaptive_pairings = get_top_adaptive_pairings(data)
     width = 50
 
     print(f"\n{CLR_CYAN}┌" + "─" * width + "┐")
@@ -109,7 +140,6 @@ def view_progress(data):
     print(f"│{CLR_RESET} Points            : {CLR_GREEN}{stats['points']:<33}{CLR_CYAN}│")
     print(f"│{CLR_RESET} Custom Activities : {len(data['custom_activities'])}".ljust(width + 1) + f"{CLR_CYAN}│")
     
-    # 📊 Dynamically formatted Focus Score rendering inside progress block
     score_bar_width = 15
     score_filled = int((focus_score / 100) * score_bar_width)
     score_bar = "█" * score_filled + "░" * (score_bar_width - score_filled)
@@ -127,6 +157,20 @@ def view_progress(data):
             display_name = name if len(name) <= 25 else name[:22] + "..."
             line = f" {i}. {display_name} - {count}x"
             print(f"{CLR_CYAN}│{CLR_RESET}" + f"{CLR_YELLOW}{line:<50}"[5:] + f"{CLR_CYAN}│")
+
+    # ==================== NEW: TOP ADAPTIVE REDIRECTS ====================
+    print(f"{CLR_CYAN}├" + "─" * width + "┤")
+    print("│" + "TOP ADAPTIVE REDIRECTS".center(width) + "│")
+    print("├" + "─" * width + "┤" + CLR_RESET)
+    
+    if not adaptive_pairings:
+        print(f"{CLR_CYAN}│{CLR_RESET}" + " No patterns learned yet. Build history!".ljust(width) + f"{CLR_CYAN}│")
+    else:
+        for trigger, pair in adaptive_pairings.items():
+            clean_t = trigger if len(trigger) <= 12 else trigger[:9] + "..."
+            clean_a = pair["activity"] if len(pair["activity"]) <= 22 else pair["activity"][:19] + "..."
+            line = f" {clean_t} -> {clean_a} ({pair['count']}x)"
+            print(f"{CLR_CYAN}│{CLR_RESET}" + f"{CLR_GREEN}{line:<50}"[5:] + f"{CLR_CYAN}│")
 
     # ==================== UNLOCKED BADGES GRID ====================
     print(f"{CLR_CYAN}├" + "─" * width + "┤")
@@ -174,14 +218,15 @@ def main():
     start_attention_guardian(data, save_data)
 
     while True:
-        # 👑 UPDATED VERSION HEADER FOR THE ENGINE LOOP
+        # 👑 UPDATED VERSION HEADER FOR THE ADAPTIVE LOOP
         print(f"\n{CLR_CYAN}=================================================={CLR_RESET}")
-        print(f"     {CLR_GREEN}DOPA-DIRECT v5.0: THE ATTENTION GUARDIAN{CLR_RESET}     ")
+        print(f"     {CLR_GREEN}DOPA-DIRECT v5.2: THE ADAPTIVE REDIRECTOR{CLR_RESET}     ")
         print(f"{CLR_CYAN}=================================================={CLR_RESET}")
-        print("\n Log an Instant-Gratification Impulse")
-        print(" Add Custom Productive Activity")
-        print(" View Progress")
-        print(" Exit Workspace")
+        
+        print(f" [1] Log an Instant-Gratification Impulse")
+        print(f" [2] Add Custom Productive Activity")
+        print(f" [3] View Progress")
+        print(f" [4] Exit Workspace")
 
         choice = input("\nSelect an action: ").strip()
 
