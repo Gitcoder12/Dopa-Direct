@@ -16,9 +16,14 @@ def load_data():
         print(f"\n⚠️ Could not read {DATA_FILE} ({e}). Starting fresh.")
         return json.loads(json.dumps(DEFAULT_DATA))
 
+    # --- TOP LEVEL DICTIONARY MIGRATION DEFAULTS ---
     data.setdefault("custom_activities", [])
     data.setdefault("triggers", {})
+    
+    # 🎯 TARGET PLACEMENT: Add this right here to track unlocked badge history
+    data.setdefault("unlocked_achievements", [])
 
+    # --- NESTED STATS DICTIONARY MIGRATION DEFAULTS ---
     stats = data.setdefault("stats", {})
 
     # Migrate from the v2 schema (key was renamed)

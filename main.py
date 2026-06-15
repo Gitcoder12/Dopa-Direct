@@ -56,8 +56,20 @@ def log_impulse(data):
 
     if completed:
         record_success(data)
+        
+        # 🔗 REAL-TIME ACHIEVEMENT ENGINE HOOK
+        from achievements import check_achievements
+        new_unlocks = check_achievements(data)
+        
         stats = data["stats"]
         print(f"\n🏆 {CLR_GREEN}+10 points | Current streak: {stats['current_streak']} | Best: {stats['best_streak']}{CLR_RESET}")
+        
+        # 🌟 Instant Reward Banner Sequence
+        for ach in new_unlocks:
+            print(f"\n✨ {CLR_YELLOW}[ACHIEVEMENT UNLOCKED]{CLR_RESET} ✨")
+            print(f"🏅 Name   : {CLR_GREEN}{ach['name']}{CLR_RESET} ({ach['rarity']}{CLR_RESET})")
+            print(f"📜 Detail : {ach['desc']}")
+            print(f"🎁 Reward : {CLR_YELLOW}+{ach['bonus']} Bonus Points!{CLR_RESET}\n")
     else:
         record_failure(data)
         print(f"\n❌ {CLR_RED}Streak broken. Let's rebuild it on the next run!{CLR_RESET}")
@@ -81,11 +93,12 @@ def add_custom_activity(data):
 
 
 def view_progress(data):
+    from achievements import ACHIEVEMENT_MANIFEST, get_next_achievement
     stats = data["stats"]
     triggers = top_triggers(data)
+    unlocked_ids = data.setdefault("unlocked_achievements", [])
     width = 50
 
-    # Colorful Dashboard Layout
     print(f"\n{CLR_CYAN}┌" + "─" * width + "┐")
     print("│" + "YOUR PROGRESS".center(width) + "│")
     print("├" + "─" * width + "┤")
@@ -104,8 +117,42 @@ def view_progress(data):
         for i, (name, count) in enumerate(triggers, 1):
             display_name = name if len(name) <= 25 else name[:22] + "..."
             line = f" {i}. {display_name} - {count}x"
-            # Keep string length calculated cleanly for the box format
             print(f"{CLR_CYAN}│{CLR_RESET}" + f"{CLR_YELLOW}{line:<50}"[5:] + f"{CLR_CYAN}│")
+
+    # ==================== UNLOCKED BADGES GRID ====================
+    print(f"{CLR_CYAN}├" + "─" * width + "┤")
+    print("│" + "UNLOCKED BADGES".center(width) + "│")
+    print("├" + "─" * width + "┤" + CLR_RESET)
+
+    if not unlocked_ids:
+        print(f"{CLR_CYAN}│{CLR_RESET}" + " No milestones unlocked yet. Build discipline!".ljust(width) + f"{CLR_CYAN}│")
+    else:
+        for ach_id in unlocked_ids:
+            meta = ACHIEVEMENT_MANIFEST.get(ach_id)
+            if meta:
+                badge_str = f" {meta['name']} ({meta['rarity']}{CLR_RESET})"
+                plain_len = len(f" {meta['name']} (⚪ Common)")
+                padding = width - plain_len
+                print(f"{CLR_CYAN}│{CLR_RESET}" + badge_str + (" " * padding) + f"{CLR_CYAN}│")
+
+    # ==================== NEXT MILESTONE TRACKER ====================
+    print(f"{CLR_CYAN}├" + "─" * width + "┤")
+    print("│" + "NEXT MILESTONE TRACKER".center(width) + "│")
+    print("├" + "─" * width + "┤" + CLR_RESET)
+    
+    next_ach = get_next_achievement(data)
+    if not next_ach:
+        print(f"{CLR_CYAN}│{CLR_RESET}" + f" 👑 {CLR_YELLOW}MAX LEVEL: All redirection badges unlocked!{CLR_RESET}".ljust(width + 9) + f"{CLR_CYAN}│")
+    else:
+        bar_width = 20
+        filled = int((next_ach['pct'] / 100) * bar_width)
+        bar = "█" * filled + "░" * (bar_width - filled)
+        
+        line1 = f" Target: {next_ach['name']}"
+        line2 = f" Progress: [{bar}] {next_ach['current']}/{next_ach['target']}"
+        
+        print(f"{CLR_CYAN}│{CLR_RESET}" + line1.ljust(width) + f"{CLR_CYAN}│")
+        print(f"{CLR_CYAN}│{CLR_RESET}" + line2.ljust(width) + f"{CLR_CYAN}│")
 
     print(f"{CLR_CYAN}└" + "─" * width + f"┘{CLR_RESET}")
 
@@ -114,13 +161,14 @@ def main():
     data = load_data()
 
     while True:
+        # 👑 UPDATED VERSION HEADER FOR THE ENGINE LOOP
         print(f"\n{CLR_CYAN}=================================================={CLR_RESET}")
-        print(f"        {CLR_GREEN}DOPA-DIRECT v3.0: THE LOOP INTERCEPTOR{CLR_RESET}     ")
+        print(f"     {CLR_GREEN}DOPA-DIRECT v4.0: THE ACHIEVEMENT ENGINE{CLR_RESET}     ")
         print(f"{CLR_CYAN}=================================================={CLR_RESET}")
-        print("\n[1] Log an Instant-Gratification Impulse")
-        print("[2] Add Custom Productive Activity")
-        print("[3] View Progress")
-        print("[4] Exit Workspace")
+        print("\n [1] Log an Instant-Gratification Impulse")
+        print(" [2] Add Custom Productive Activity")
+        print(" [3] View Progress")
+        print(" [4] Exit Workspace")
 
         choice = input("\nSelect an action: ").strip()
 
