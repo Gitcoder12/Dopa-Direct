@@ -1,80 +1,9 @@
-Added custom activities + streak/points system, persisted to JSON.
-
-```python
-import time
 import random
-import sys
-import json
-import os
+import time
 
-DATA_FILE = "dopa_data.json"
-FOCUS_LOCK_SECONDS = 60
-
-DEFAULT_ACTIVITIES = [
-    "Write 10 lines of code for Dopa-Direct.",
-    "Read 5 pages of your current research paper or book.",
-    "Do a 2-minute stretching or breathing exercise.",
-    "Review your Git repository status and plan your next feature.",
-    "Learn 3 new terminal navigation shortcuts.",
-    "Drink a glass of water and close your eyes for 60 seconds.",
-]
-
-DEFAULT_DATA = {
-    "custom_activities": [],
-    "stats": {"current_streak": 0, "best_streak": 0, "total_completions": 0, "points": 0},
-}
-
-
-def load_data():
-    """Load persisted state. Falls back to defaults if missing or corrupted."""
-    if not os.path.exists(DATA_FILE):
-        return json.loads(json.dumps(DEFAULT_DATA))
-
-    try:
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except (json.JSONDecodeError, OSError) as e:
-        print(f"\n⚠️ Could not read {DATA_FILE} ({e}). Starting fresh.")
-        return json.loads(json.dumps(DEFAULT_DATA))
-
-    data.setdefault("custom_activities", [])
-    stats = data.setdefault("stats", {})
-    for key, default_val in DEFAULT_DATA["stats"].items():
-        stats.setdefault(key, default_val)
-
-    return data
-
-
-def save_data(data):
-    """Persist state to disk. Warns on failure but never crashes."""
-    try:
-        with open(DATA_FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2)
-    except OSError as e:
-        print(f"\n⚠️ Could not save progress ({e}).")
-
-
-def get_all_activities(data):
-    return DEFAULT_ACTIVITIES + data["custom_activities"]
-
-
-def run_focus_lock(seconds):
-    """Live countdown timer. Returns True if completed, False if interrupted."""
-    print("\n🔒 [FOCUS LOCK ACTIVE] Do not close this terminal. Let your craving fade...")
-    try:
-        while seconds > 0:
-            mins, secs = divmod(seconds, 60)
-            sys.stdout.write(f"\r⏳ Time remaining: {mins:02d}:{secs:02d} ")
-            sys.stdout.flush()
-            time.sleep(1)
-            seconds -= 1
-        sys.stdout.write("\r" + " " * 30 + "\r")
-        print("✅ Cooldown complete! Loop broken. Now go build something great.")
-        return True
-    except KeyboardInterrupt:
-        sys.stdout.write("\r" + " " * 30 + "\r")
-        print("⚠️ Focus lock bypassed early! Streak reset. Stay disciplined next time!")
-        return False
+from config import FOCUS_LOCK_SECONDS, DEFAULT_ACTIVITIES
+from storage import load_data, save_data, get_all_activities
+from timer import run_focus_lock
 
 
 def log_impulse(data):
@@ -161,6 +90,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
-
-Non-obvious: streak resets to 0 if you Ctrl+C out of the countdown (no cheating the timer). State lives in `dopa_data.json` next to the script — delete it to reset everything.
