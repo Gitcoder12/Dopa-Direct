@@ -10,7 +10,29 @@ DEFAULT_ACTIVITIES = [
     "Drink a glass of water and close your eyes for 60 seconds.",
 ]
 
+TRIGGER_OPTIONS = [
+    "YouTube",
+    "Instagram",
+    "Reddit",
+    "Twitter/X",
+    "WhatsApp",
+    "Custom",
+]
+
 DEFAULT_DATA = {
     "custom_activities": [],
-    "stats": {"current_streak": 0, "best_streak": 0, "total_completions": 0, "points": 0},
+    "stats": {
+        "current_streak": 0,
+        "best_streak": 0,
+        "total_redirects": 0,
+        "points": 0,
+    },
+    "triggers": {},
 }
+
+# Simple, dependency-free ANSI Colors
+CLR_GREEN = "\033[92m"
+CLR_CYAN = "\033[96m"
+CLR_YELLOW = "\033[93m"
+CLR_RED = "\033[91m"
+CLR_RESET = "\033[0m"

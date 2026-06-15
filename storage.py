@@ -17,7 +17,14 @@ def load_data():
         return json.loads(json.dumps(DEFAULT_DATA))
 
     data.setdefault("custom_activities", [])
+    data.setdefault("triggers", {})
+
     stats = data.setdefault("stats", {})
+
+    # Migrate from the v2 schema (key was renamed)
+    if "total_completions" in stats and "total_redirects" not in stats:
+        stats["total_redirects"] = stats.pop("total_completions")
+
     for key, default_val in DEFAULT_DATA["stats"].items():
         stats.setdefault(key, default_val)
 
