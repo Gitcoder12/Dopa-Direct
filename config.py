@@ -21,11 +21,13 @@ TRIGGER_OPTIONS = [
 
 DEFAULT_DATA = {
     "custom_activities": [],
+    "unlocked_achievements": [],
     "stats": {
         "current_streak": 0,
         "best_streak": 0,
         "total_redirects": 0,
         "points": 0,
+        "focus_score": 100,
     },
     "triggers": {},
 }
@@ -36,3 +38,11 @@ CLR_CYAN = "\033[96m"
 CLR_YELLOW = "\033[93m"
 CLR_RED = "\033[91m"
 CLR_RESET = "\033[0m"
+
+# ==================== v5.0 ATTENTION GUARDIAN CONFIGS ====================
+GUARDIAN_POLL_INTERVAL_SECONDS = 60
+
+DISTRACTION_KEYWORDS = [
+    "youtube", "reddit", "instagram", "facebook", 
+    "twitter", "x.com", "shorts", "reels", "netflix"
+]

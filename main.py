@@ -97,6 +97,7 @@ def view_progress(data):
     stats = data["stats"]
     triggers = top_triggers(data)
     unlocked_ids = data.setdefault("unlocked_achievements", [])
+    focus_score = stats.setdefault("focus_score", 100)
     width = 50
 
     print(f"\n{CLR_CYAN}┌" + "─" * width + "┐")
@@ -107,6 +108,14 @@ def view_progress(data):
     print(f"│{CLR_RESET} Total Redirects   : {stats['total_redirects']:<33}{CLR_CYAN}│")
     print(f"│{CLR_RESET} Points            : {CLR_GREEN}{stats['points']:<33}{CLR_CYAN}│")
     print(f"│{CLR_RESET} Custom Activities : {len(data['custom_activities'])}".ljust(width + 1) + f"{CLR_CYAN}│")
+    
+    # 📊 Dynamically formatted Focus Score rendering inside progress block
+    score_bar_width = 15
+    score_filled = int((focus_score / 100) * score_bar_width)
+    score_bar = "█" * score_filled + "░" * (score_bar_width - score_filled)
+    score_str = f"[{score_bar}] {focus_score}%"
+    print(f"│{CLR_RESET} Focus Score       : {CLR_CYAN}{score_str:<33}{CLR_CYAN}│")
+    
     print("├" + "─" * width + "┤")
     print("│" + "TOP TRIGGERS".center(width) + "│")
     print("├" + "─" * width + "┤" + CLR_RESET)
@@ -159,16 +168,20 @@ def view_progress(data):
 
 def main():
     data = load_data()
+    
+    # 🧭 INITIALIZE PASSIVE BACKGROUND ATTENTION GUARDIAN
+    from guardian import start_attention_guardian
+    start_attention_guardian(data, save_data)
 
     while True:
         # 👑 UPDATED VERSION HEADER FOR THE ENGINE LOOP
         print(f"\n{CLR_CYAN}=================================================={CLR_RESET}")
-        print(f"     {CLR_GREEN}DOPA-DIRECT v4.0: THE ACHIEVEMENT ENGINE{CLR_RESET}     ")
+        print(f"     {CLR_GREEN}DOPA-DIRECT v5.0: THE ATTENTION GUARDIAN{CLR_RESET}     ")
         print(f"{CLR_CYAN}=================================================={CLR_RESET}")
-        print("\n [1] Log an Instant-Gratification Impulse")
-        print(" [2] Add Custom Productive Activity")
-        print(" [3] View Progress")
-        print(" [4] Exit Workspace")
+        print("\n Log an Instant-Gratification Impulse")
+        print(" Add Custom Productive Activity")
+        print(" View Progress")
+        print(" Exit Workspace")
 
         choice = input("\nSelect an action: ").strip()
 
