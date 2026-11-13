@@ -13,7 +13,7 @@ def load_data():
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
     except (json.JSONDecodeError, OSError) as e:
-        print(f"\n⚠️ Could not read {DATA_FILE} ({e}). Starting fresh.")
+        print(f"\n Could not read {DATA_FILE} ({e}). Starting fresh.")
         return json.loads(json.dumps(DEFAULT_DATA))
 
     # --- TOP LEVEL DICTIONARY MIGRATION DEFAULTS ---
@@ -21,7 +21,7 @@ def load_data():
     data.setdefault("triggers", {})
     data.setdefault("unlocked_achievements", [])
     
-    # 🧠 v5.2 TARGET SPOT: Inject choice metrics safely into existing saves
+    #  v5.2 TARGET SPOT: Inject choice metrics safely into existing saves
     data.setdefault("redirect_history", {})
 
     # --- NESTED STATS DICTIONARY MIGRATION DEFAULTS ---
@@ -43,7 +43,7 @@ def save_data(data):
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
     except OSError as e:
-        print(f"\n⚠️ Could not save progress ({e}).")
+        print(f"\n Could not save progress ({e}).")
 
 
 def get_all_activities(data):
