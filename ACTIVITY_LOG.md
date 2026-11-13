@@ -17,3 +17,12 @@ Local-first Python CLI that records distraction triggers, recommends an activity
 | YYYY-MM-DD | name | link | paths | exact command and OS | pass / fail / not run | evidence |
 
 Record platform/version, timer behavior, storage state and test results. Do not store real browsing histories, passwords or sensitive personal material in examples or logs.
+
+## Portfolio documentation rollout — 2026-11-13
+
+- Documentation PR: https://github.com/Gitcoder12/Dopa-Direct/pull/2
+- Added project-specific feature plan, company-fit mapping, two-level README guide and quality checklist.
+- Added or preserved contributor instructions and scoped agent/skills guidance as shown in the PR diff.
+- README now includes a plain-language explanation and a technical/research view without claiming unimplemented functionality.
+- Validation: documentation/source review only; no application runtime test or deployment is claimed by this documentation PR.
+- Status: draft PR, not merged.
