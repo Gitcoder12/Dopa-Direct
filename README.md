@@ -83,3 +83,15 @@ MIT. See [LICENSE](LICENSE).
 - [Company and team fit](COMPANY_FIT.md) · [README explanation draft](README_ADDENDUM_DRAFT.md)
 - [README quality checklist](README_QUALITY_CHECKLIST.md)
 - [Contributing](CONTRIBUTING.md) · [Agent instructions](AGENTS.md) · [Agent skills](SKILLS.md)
+
+## Understanding the project
+
+### In plain language
+
+A local Python tool that helps someone notice a distraction, choose a better next task and track short focus sessions.
+
+### Technical and research view
+
+The user records a distraction, chooses an activity and starts a short focus session. The CLI stores session results locally so the user can review progress later.
+
+For future work, see [FEATURE_UPGRADE_PLAN.md](FEATURE_UPGRADE_PLAN.md), [ACTIVITY_LOG.md](ACTIVITY_LOG.md), [COMPANY_FIT.md](COMPANY_FIT.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
