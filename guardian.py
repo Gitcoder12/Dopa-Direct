@@ -63,7 +63,7 @@ def guardian_worker(data_ref: dict, save_callback: Callable[[dict], None]) -> No
             save_callback(data_ref)
 
             print(f"\n\n{CLR_RED}╔══════════════════════════════════════════════════╗")
-            print(f"║  🧭  ATTENTION GUARDIAN ALERT                    ║")
+            print(f"║    ATTENTION GUARDIAN ALERT                    ║")
             print(f"╠══════════════════════════════════════════════════╣")
             print(f"║ Your attention may be drifting...                ║")
             print(f"║ Detected keyword: {matched_keyword.title():<27}║")

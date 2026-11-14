@@ -46,7 +46,7 @@ def log_impulse(data):
     trigger = choose_trigger()
     log_trigger(data, trigger)
 
-    print(f"\n{CLR_YELLOW}⚠️ Trigger Detected: {trigger}{CLR_RESET}")
+    print(f"\n{CLR_YELLOW} Trigger Detected: {trigger}{CLR_RESET}")
     print(f"{CLR_CYAN}Recommended Redirects:{CLR_RESET}")
     
     # Pull contextual learned parameters
@@ -70,12 +70,12 @@ def log_impulse(data):
         else:
             raise ValueError
     except ValueError:
-        print(f"\n{CLR_RED}⚠️ Invalid choice selection. Rolling fallback random activity.{CLR_RESET}")
+        print(f"\n{CLR_RED} Invalid choice selection. Rolling fallback random activity.{CLR_RESET}")
         chosen_task = random.choice(get_all_activities(data))
 
-    print(f"\n⚡ {CLR_GREEN}[REDIRECT INITIALIZED]{CLR_RESET}")
+    print(f"\n {CLR_GREEN}[REDIRECT INITIALIZED]{CLR_RESET}")
     print(f"Instead of checking {trigger}, commit to this now:")
-    print(f"👉 {CLR_YELLOW}{chosen_task}{CLR_RESET}")
+    print(f" {CLR_YELLOW}{chosen_task}{CLR_RESET}")
 
     completed = run_focus_lock(FOCUS_LOCK_SECONDS)
 
@@ -85,22 +85,22 @@ def log_impulse(data):
         # Core Optimization: Increment behavioral matrices only on success
         learn_choice(data, trigger, chosen_task)
         
-        # 🔗 REAL-TIME ACHIEVEMENT ENGINE HOOK
+        #  REAL-TIME ACHIEVEMENT ENGINE HOOK
         from achievements import check_achievements
         new_unlocks = check_achievements(data)
         
         stats = data["stats"]
-        print(f"\n🏆 {CLR_GREEN}+10 points | Current streak: {stats['current_streak']} | Best: {stats['best_streak']}{CLR_RESET}")
+        print(f"\n {CLR_GREEN}+10 points | Current streak: {stats['current_streak']} | Best: {stats['best_streak']}{CLR_RESET}")
         
-        # 🌟 Instant Reward Banner Sequence
+        #  Instant Reward Banner Sequence
         for ach in new_unlocks:
-            print(f"\n✨ {CLR_YELLOW}[ACHIEVEMENT UNLOCKED]{CLR_RESET} ✨")
-            print(f"🏅 Name   : {CLR_GREEN}{ach['name']}{CLR_RESET} ({ach['rarity']}{CLR_RESET})")
-            print(f"📜 Detail : {ach['desc']}")
-            print(f"🎁 Reward : {CLR_YELLOW}+{ach['bonus']} Bonus Points!{CLR_RESET}\n")
+            print(f"\n {CLR_YELLOW}[ACHIEVEMENT UNLOCKED]{CLR_RESET} ")
+            print(f" Name   : {CLR_GREEN}{ach['name']}{CLR_RESET} ({ach['rarity']}{CLR_RESET})")
+            print(f" Detail : {ach['desc']}")
+            print(f" Reward : {CLR_YELLOW}+{ach['bonus']} Bonus Points!{CLR_RESET}\n")
     else:
         record_failure(data)
-        print(f"\n❌ {CLR_RED}Streak broken. Let's rebuild it on the next run!{CLR_RESET}")
+        print(f"\n {CLR_RED}Streak broken. Let's rebuild it on the next run!{CLR_RESET}")
 
     save_data(data)
 
@@ -108,16 +108,16 @@ def log_impulse(data):
 def add_custom_activity(data):
     activity = input("\nEnter your custom productive activity: ").strip()
     if not activity:
-        print(f"\n{CLR_RED}⚠️ Activity cannot be empty. Nothing added.{CLR_RESET}")
+        print(f"\n{CLR_RED} Activity cannot be empty. Nothing added.{CLR_RESET}")
         return
 
     if activity in data["custom_activities"] or activity in DEFAULT_ACTIVITIES:
-        print(f"\n{CLR_RED}⚠️ That activity already exists. Nothing added.{CLR_RESET}")
+        print(f"\n{CLR_RED} That activity already exists. Nothing added.{CLR_RESET}")
         return
 
     data["custom_activities"].append(activity)
     save_data(data)
-    print(f"\n{CLR_GREEN}✅ Added: \"{activity}\"{CLR_RESET}")
+    print(f"\n{CLR_GREEN} Added: \"{activity}\"{CLR_RESET}")
 
 
 def view_progress(data):
@@ -184,7 +184,7 @@ def view_progress(data):
             meta = ACHIEVEMENT_MANIFEST.get(ach_id)
             if meta:
                 badge_str = f" {meta['name']} ({meta['rarity']}{CLR_RESET})"
-                plain_len = len(f" {meta['name']} (⚪ Common)")
+                plain_len = len(f" {meta['name']} ( Common)")
                 padding = width - plain_len
                 print(f"{CLR_CYAN}│{CLR_RESET}" + badge_str + (" " * padding) + f"{CLR_CYAN}│")
 
@@ -195,7 +195,7 @@ def view_progress(data):
     
     next_ach = get_next_achievement(data)
     if not next_ach:
-        print(f"{CLR_CYAN}│{CLR_RESET}" + f" 👑 {CLR_YELLOW}MAX LEVEL: All redirection badges unlocked!{CLR_RESET}".ljust(width + 9) + f"{CLR_CYAN}│")
+        print(f"{CLR_CYAN}│{CLR_RESET}" + f"  {CLR_YELLOW}MAX LEVEL: All redirection badges unlocked!{CLR_RESET}".ljust(width + 9) + f"{CLR_CYAN}│")
     else:
         bar_width = 20
         filled = int((next_ach['pct'] / 100) * bar_width)
@@ -213,12 +213,12 @@ def view_progress(data):
 def main():
     data = load_data()
     
-    # 🧭 INITIALIZE PASSIVE BACKGROUND ATTENTION GUARDIAN
+    #  INITIALIZE PASSIVE BACKGROUND ATTENTION GUARDIAN
     from guardian import start_attention_guardian
     start_attention_guardian(data, save_data)
 
     while True:
-        # 👑 UPDATED VERSION HEADER FOR THE ADAPTIVE LOOP
+        #  UPDATED VERSION HEADER FOR THE ADAPTIVE LOOP
         print(f"\n{CLR_CYAN}=================================================={CLR_RESET}")
         print(f"     {CLR_GREEN}DOPA-DIRECT v5.2: THE ADAPTIVE REDIRECTOR{CLR_RESET}     ")
         print(f"{CLR_CYAN}=================================================={CLR_RESET}")
@@ -240,7 +240,7 @@ def main():
             print(f"\n{CLR_GREEN}Exiting workspace. Stay focused and keep building, developer!{CLR_RESET}")
             break
         else:
-            print(f"\n{CLR_RED}⚠️ Invalid choice. Pick 1-4.{CLR_RESET}")
+            print(f"\n{CLR_RED} Invalid choice. Pick 1-4.{CLR_RESET}")
 
 
 if __name__ == "__main__":
