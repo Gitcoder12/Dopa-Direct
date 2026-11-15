@@ -51,3 +51,6 @@ The inspected test suite contains one platform-availability test. Timer interrup
 3. Add debounce/cooldown semantics.
 4. Document opt-in, privacy boundaries, and platform limitations.
 5. Add tests for timer, storage, redirector, streaks, and guardian lifecycle.
+
+## PR head verification
+- PR #2 head CI: Dopa-Direct Tests completed successfully. This validates the configured compileall and unittest steps on the PR head; Windows-specific runtime behaviour was not exercised by the Linux runner.
