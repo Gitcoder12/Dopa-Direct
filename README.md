@@ -352,3 +352,22 @@ This section supplements the maintainer-authored README above. The original text
 - Mark unverified sources, identifiers, metrics, benchmark results and external claims as unknown/unverified rather than guessing.
 - Verify setup, execution, tests and public claims against the exact current commit before using this repository in a job, research or academic application.
 - See [MODEL_AUDIT_ROUTER.md](MODEL_AUDIT_ROUTER.md) for independent model review instructions and the merge gate.
+
+---
+
+## Engineering Audit & Handover — 2026-11-17
+
+**Review scope:** default branch `main`; static inspection of `main.py`, `storage.py`, `adaptive_redirector.py`, and `config.py`. Runtime tests were not executed.
+
+### Confirmed findings
+- User state is stored in a local JSON file. `save_data()` rewrites that file directly rather than using an atomic replace/backup strategy.
+- If the existing data file is malformed or unreadable, `load_data()` warns and returns default state. A later save can replace the prior file, so preserve a backup before attempting recovery from a corrupted save.
+- The adaptive redirector learns activity counts from successful focus sessions; this is a simple frequency-based recommender, not a validated behavioral or clinical intervention.
+- The fallback activity pool is populated from `DEFAULT_ACTIVITIES`, but corrupted or manually edited state still needs schema validation.
+
+### Next actions
+1. Use atomic writes with backup/recovery and validate the persisted JSON schema before accepting it.
+2. Add tests for missing, corrupted, old-version, and partially populated save files.
+3. Document the limits of the recommendation/streak model and avoid making clinical or therapeutic claims.
+
+**Verification status:** static source inspection only; CLI behavior, focus timer behavior, and tests remain unverified.
