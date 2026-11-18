@@ -371,3 +371,10 @@ This section supplements the maintainer-authored README above. The original text
 3. Document the limits of the recommendation/streak model and avoid making clinical or therapeutic claims.
 
 **Verification status:** static source inspection only; CLI behavior, focus timer behavior, and tests remain unverified.
+
+---
+
+## Examples Used
+- Redirecting an urge to browse social media into a focused task
+- Using a cooldown session to interrupt repeated distraction
+- Tracking which productive activities help maintain focus
