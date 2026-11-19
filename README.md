@@ -378,3 +378,27 @@ This section supplements the maintainer-authored README above. The original text
 - Redirecting an urge to browse social media into a focused task
 - Using a cooldown session to interrupt repeated distraction
 - Tracking which productive activities help maintain focus
+
+
+---
+
+## Comparison with Existing Open-Source Projects
+
+Dopa-Direct is documented as a lightweight distraction-interruption toolkit that records an urge, activates a cooldown and suggests a productive redirect. These projects provide adjacent website-blocking, activity-awareness and focus-reminder approaches.
+
+| Project | Established focus | Relationship to Dopa-Direct |
+|---|---|---|
+| [LeechBlock NG](https://github.com/proginosko/LeechBlockNG) | Browser extension for blocking distracting websites with configurable schedules | Stronger browser-level blocking controls; Dopa-Direct's stated distinction is the moment-of-urge workflow and explicit redirection to a chosen activity. |
+| [SelfControl](https://github.com/SelfControlApp/selfcontrol) | macOS utility that blocks distracting internet access for a set period | A focused commitment/cooldown tool; Dopa-Direct aims to pair interruption with a suggested productive next action and progress tracking. |
+| [ActivityWatch](https://github.com/ActivityWatch/activitywatch) | Local activity tracking and time-use awareness | Provides activity-awareness data; Dopa-Direct focuses on deliberate self-reported interception and redirect behavior rather than passive tracking alone. |
+
+### Where Dopa-Direct is different
+- **Intervene at the impulse point:** the user records the distraction trigger before it becomes an extended browsing session.
+- **Redirect, not only block:** the workflow suggests a concrete productive activity and records the user's selection.
+- **Lightweight local toolkit:** the README describes a zero-dependency Python tool with local progress tracking.
+
+### Where established projects are stronger
+LeechBlock and SelfControl have more direct browser/system blocking mechanisms. ActivityWatch has a mature activity-monitoring ecosystem. Dopa-Direct should not claim to technically prevent access to distracting services unless OS/browser enforcement is implemented and tested; a logged urge or countdown is not equivalent to a blocker.
+
+### Evidence, privacy and wellbeing limitations
+Keep tracking local by default, make reminders non-punitive, and provide an easy pause/disable option. Evaluate whether users actually return to their intended task rather than measuring streaks alone. Do not frame the tool as treatment for addiction or a mental-health condition. This is a workflow comparison, not a productivity-efficacy claim.
